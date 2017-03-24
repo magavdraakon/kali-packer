@@ -3,13 +3,14 @@
   "variables": {
     "ssh_name": "student",
     "ssh_pass": "student",
-    "hostname": "packer-test",
+    "hostname": "kali.lab.template",
     "memory": "2048",
     "cpus": "1"
   },
 
   "builders": [{
     "name": "kali-linux-mate-2016",
+    "vm_name" : "kali-linux-mate-2016",
     "type": "virtualbox-iso",
     "guest_os_type": "Ubuntu_64",
     "format": "ova",
@@ -31,7 +32,7 @@
     "iso_checksum": "cd11b7085cc7d71546488106c2eedf85386fe73d731bedf38991661270dd91db",
 
 
-    "http_directory" : "http_directory",
+    "http_directory" : "http",
     "http_port_min" : 9001,
     "http_port_max" : 9001,
 
@@ -43,17 +44,18 @@
 
     "boot_wait": "10s",
 
-    "boot_command" : [
-      "<esc><esc><enter><wait>",
-      "/install/vmlinuz noapic ",
-      "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
-      "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
-      "hostname={{user `hostname`}} ",
-      "fb=false debconf/frontend=noninteractive ",
-      "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
-      "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
-      "initrd=/install/initrd.gz -- <enter>"
-    ]
+    "boot_command": [
+         "<esc><wait>",
+         "install ",
+   "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+   "debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>",
+   "fb=false debconf/frontend=noninteractive ",
+   "console-setup/ask_detect=false <wait>",
+     "console-keymaps-at/keymap=us ",
+   "keyboard-configuration/xkb-keymap=us <wait>",
+         "<enter><wait10><wait10><wait10>",
+         "<enter><wait>"
+       ]
     }],
     "provisioners" : [{
       "type": "shell",
